@@ -13,7 +13,7 @@ object AdventOfCode1 extends App {
     }
   }
 
-  val floor1 = inputAsList.map(nextMovement).reduce((s, x) => s + x)
+  val floor1 = puzzleInput.map(nextMovement).sum
 
   println(floor1)
 
@@ -47,7 +47,6 @@ object AdventOfCode1 extends App {
       (currentFloor, acc._2)
     }
   })
-
 
   println(finalFloorAndBasementPosition)
 

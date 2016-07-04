@@ -22,10 +22,10 @@ object AdventOfCode2 extends App {
   }
 
   def ribbon(l: Int, h: Int, w: Int) = {
-    smallestPerimeter(l, h, w) + cubicVolume(l, h, w)
+    smallestPerimeter(l, h, w) + volume(l, h, w)
   }
 
-  def cubicVolume(l: Int, h: Int, w: Int): Int = {
+  def volume(l: Int, h: Int, w: Int): Int = {
     l * h * w
   }
 
@@ -35,7 +35,7 @@ object AdventOfCode2 extends App {
 
   val wrappingPaperToOrder = puzzleInputAsTriplet.foldLeft(0)((s, x) => s + wrapping(x._1, x._2, x._3))
 
-  val ribbonToOrder = puzzleInputAsTriplet.map(x => ribbon(x._1, x._2, x._3)).reduce(_+_)
+  val ribbonToOrder = puzzleInputAsTriplet.map((ribbon _).tupled).reduce(_+_)
 
   println(wrappingPaperToOrder)
 
