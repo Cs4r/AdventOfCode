@@ -1,5 +1,6 @@
 package cs4r.labs.learningscala.adventofcode
 
+import scala.annotation.tailrec
 import scala.collection.immutable.IndexedSeq
 
 object AdventOfCode5 extends App {
@@ -1009,8 +1010,7 @@ object AdventOfCode5 extends App {
   private val listOfStrings: List[String] = puzzleInput.split("\n").toList
 
   def firstCondition(input: String) = {
-    val vowels = List('a', 'e', 'i', 'o', 'u')
-    vowels.map(v => input count (_ == v)).sum >= 3
+    List('a', 'e', 'i', 'o', 'u').map(v => input count (_ == v)).sum >= 3
   }
 
 
@@ -1022,36 +1022,33 @@ object AdventOfCode5 extends App {
     List("ab", "cd", "pq", "xy").forall(e => !input.contains(e))
   }
 
-  def fourthCondition(input: String) = {
-    val pairs = (0 to input.length - 2).map(i => input.substring(i, i + 2)).toList
+  def fulfilNiceRules(e: String): Boolean = {
+    firstCondition(e) && secondCondition(e) && thirdCondition(e)
+  }
 
-    def compress[A](l: List[A]): List[A] = l match {
-      case Nil => Nil
-      case h :: List() => List(h)
-      case h :: tail if (h == tail.head) => compress(tail)
-      case h :: tail => h :: compress(tail)
+  def fourthCondition(input: String) = {
+
+    @tailrec
+    def twoLettersAppearTwiceWwithoutOverlapping(two: String, tail: String): Boolean = {
+      if(tail.size > 1) {
+          tail.contains(two) || twoLettersAppearTwiceWwithoutOverlapping(two.tail + tail.head, tail.drop(1))
+      }else false
     }
 
-    val l = compress(pairs)
-    l.size != l.distinct.size
+    twoLettersAppearTwiceWwithoutOverlapping(input.take(2), input.drop(2))
   }
 
   def fifthCondition(input: String) = {
-    val triplets = (0 to input.length - 3).map(i => input.substring(i, i + 3)).toList
-
-    triplets.exists(e => e(0) == e(2))
+    (0 to input.length - 3).map(i => input.substring(i, i + 3)).toList.exists(e => e(0) == e(2))
   }
 
 
-  println(listOfStrings.count(e => firstCondition(e) && secondCondition(e) && thirdCondition(e)))
-
-  val sampleOutput = Array("qjhvhtzxzqqjkmpb", "xxyxx", "uurcxstgmygtbstg", "ieodomkazucvgmuy", "aaaa")
-  for (i <- 0 until sampleOutput.length) {
-    println(sampleOutput(i))
-    println("1) " + fourthCondition(sampleOutput(i)))
-    println("2) " + fifthCondition(sampleOutput(i)))
+  def fulfilNice2Rules(e: String): Boolean = {
+    fourthCondition(e) && fifthCondition(e)
   }
 
 
-  println(listOfStrings.count(e => fourthCondition(e) && fifthCondition(e)))
+  println(listOfStrings.count(fulfilNiceRules(_)))
+
+  println(listOfStrings.count(fulfilNice2Rules(_)))
 }
