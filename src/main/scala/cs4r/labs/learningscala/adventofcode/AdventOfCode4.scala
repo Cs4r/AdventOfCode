@@ -4,30 +4,35 @@ import java.security.MessageDigest
 
 object AdventOfCode4 extends App {
 
-  val puzzleInput: String = "abcdef"
-  val input: String = puzzleInput + 609043
+  val puzzleInput: String = "iwrupvqb"
 
   def md5(s: String) = {
     val instance: MessageDigest = MessageDigest.getInstance("MD5")
     instance.digest(s.getBytes)
   }
 
-  def startWithFiveZeros(s: Array[Byte]) = {
-    s.take(5).forall(_ == 0x00)
+  def startWithNZeros(n: Int)(input: Array[Byte]) = {
+    arrayToString(input).take(n).forall(_ == '0')
   }
 
-  def printHex(array: Array[Byte]) = {
-    print("0x")
-    array.foreach(e => print("%x".format(e)))
-    println
+  def startWithFiveZeros(input: Array[Byte]) = {
+    startWithNZeros(5)(input)
   }
 
-  println(input)
-  printHex(md5(input))
-  print(md5(input).length)
+  def startWithSixZeros(input: Array[Byte]) = {
+    startWithNZeros(6)(input)
+  }
 
+  def arrayToString(input: Array[Byte]): String = {
+    input.map("%02x".format(_)).reduce(_ + _)
+  }
+  println("000001dbbfa3a5c83a2d506429c7b00e".take(5))
+  println("000001dbbfa3a5c83a2d506429c7b00e".take(5).forall(_ == '0'))
+  val fiveLeadingZeros = Stream.from(1).filter(e => startWithFiveZeros(md5(puzzleInput + e)))
 
-  println(Stream.from(1).filter(e => startWithFiveZeros(md5(puzzleInput + e))).head)
+  println(fiveLeadingZeros.head)
 
+  val sixLeadingZeros = Stream.from(1).filter(e => startWithSixZeros(md5(puzzleInput + e)))
 
+  println(sixLeadingZeros.head)
 }
