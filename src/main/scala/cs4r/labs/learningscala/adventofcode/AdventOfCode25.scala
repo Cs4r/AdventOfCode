@@ -45,9 +45,9 @@ object AdventOfCode25 extends App {
     @tailrec
     def applyNTimes[E](f: E => E)(n: Long)(seed: E): E = n match {
       case n if n == 0 => seed
-      case _ => {
+      case _ =>
         val fx:E = f(seed); applyNTimes(f)(n - 1)(fx)
-      }
+
     }
 
     if(input.isDefinedAt(i) && input(i).isDefinedAt(j)) input(i)(j)
@@ -57,7 +57,6 @@ object AdventOfCode25 extends App {
       applyNTimes((e:Long) => (e * 252533) % 33554393)(steps)(seed)
     }
   }
-
 
   var partA = computeCode(initialNumbers, row, column)
   println(partA)
